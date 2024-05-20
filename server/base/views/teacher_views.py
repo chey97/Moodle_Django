@@ -4,11 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from ..models import Teacher
 from ..serializers import TeacherSerializer
-from ..permissions import IsTeacher
+from ..permissions import IsTeacher, IsAdmin
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsAuthenticated, IsTeacher, IsAdmin])
 def teacher_list(request):
     if request.method == 'GET':
         teachers = Teacher.objects.all()
