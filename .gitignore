@@ -1,1 +1,25 @@
-.venv
+# Django-related files
+*.pyc
+*.pyo
+*.pyc~
+__pycache__/
+
+# Secret key
+*.secret_key
+
+# Development database
+*.sqlite3
+
+# Production database (if applicable)
+*.db
+
+# Static files
+/static/
+
+# Media files
+/media/
+
+# Virtual environment
+venv/
+.venv/
+env/
