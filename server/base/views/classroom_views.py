@@ -2,9 +2,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from ..models import Classroom
+from rest_framework.permissions import IsAuthenticated
 from ..serializers import ClassroomSerializer
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def  classroom_list(request):
     if request.method == 'GET':
         classroom = Classroom.objects.all()
@@ -18,6 +20,7 @@ def  classroom_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def classroom_detail(request, pk):
     try:
         classroom = Classroom.objects.get(pk=pk)
