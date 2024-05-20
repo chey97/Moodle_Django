@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student, Teacher, Subject, Classroom
+from .models import Student, Teacher, Subject, Classroom, Administrator
 from .models import UserProfile
 from django.contrib.auth.models import User
 
@@ -22,6 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
         )
         UserProfile.objects.create(user=user, role=role)
         return user
+
+class AdministratorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Administrator
+        fields = ['id', 'first_name', 'last_name', 'contact_no', 'email']
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
