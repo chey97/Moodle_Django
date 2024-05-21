@@ -4,11 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from ..models import Administrator
 from ..serializers import AdministratorSerializer
-from ..permissions import IsAdmin
+from ..permissions import IsAdministrator
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated, IsAdmin])
+@permission_classes([IsAuthenticated, IsAdministrator])
 def administrator_list(request):
     if request.method == 'GET':
         administrators = Administrator.objects.all()
