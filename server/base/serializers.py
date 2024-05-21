@@ -61,7 +61,6 @@ class UserSerializer(serializers.ModelSerializer):
 
         if role == 'student':
             Student.objects.create(
-                user_profile=user_profile,
                 first_name=user.first_name,
                 last_name=user.last_name,
                 contact_person=contact_person,
@@ -72,7 +71,6 @@ class UserSerializer(serializers.ModelSerializer):
             )
         elif role == 'teacher':
             Teacher.objects.create(
-                user_profile=user_profile,
                 first_name=user.first_name,
                 last_name=user.last_name,
                 contact_no=contact_no,  
