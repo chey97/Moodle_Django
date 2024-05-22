@@ -1,26 +1,20 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from ..permissions import IsAdministrator,IsTeacher
 from rest_framework.response import Response
 from rest_framework import status
 from ..models import Student
 from ..serializers import StudentSerializer
-
-@api_view(['GET', 'POST'])
+    
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def student_list(request):
-    if request.method == 'GET':
-        students = Student.objects.all()
-        serializer = StudentSerializer(students, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+def student_list_get(request):
+    students = Student.objects.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data)
+    
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdministrator])
 def student_detail(request, pk):
     try:
         student = Student.objects.get(pk=pk)
