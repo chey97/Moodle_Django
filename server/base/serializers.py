@@ -1,7 +1,6 @@
 import datetime
 from rest_framework import serializers
 from .models import Student, Teacher, Subject, Classroom, Administrator
-from .models import UserProfile
 from django.contrib.auth.models import User
 
 class AdministratorSerializer(serializers.ModelSerializer):
@@ -56,8 +55,6 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', '')
         )
-        
-        user_profile = UserProfile.objects.create(user=user, role=role)
 
         if role == 'student':
             Student.objects.create(
@@ -83,5 +80,6 @@ class UserSerializer(serializers.ModelSerializer):
                 contact_no=contact_no,  
                 email=user.email,
             )
-        
+            
+        print(f'{validated_data} {role} user created')
         return user
