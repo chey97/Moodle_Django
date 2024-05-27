@@ -10,18 +10,15 @@ import {
   Container,
   Button,
   MenuItem,
+  Tooltip,
+  Grid,
 } from "@mui/material";
 
 import AdbIcon from "@mui/icons-material/Adb";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useNavigate } from "react-router-dom";
 
-const pages = [
-  "Teachers",
-  "Students",
-  "Administrators",
-  "Subjects",
-  "Classrooms",
-];
+const pages = [];
 
 export const Navigation = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -131,6 +128,16 @@ export const Navigation = (props) => {
                 {page}
               </Button>
             ))}
+          </Box>
+
+          <Box>
+            <Grid item>
+              <Tooltip title="Alerts • No alerts">
+                <IconButton color="inherit">
+                  <NotificationsIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
