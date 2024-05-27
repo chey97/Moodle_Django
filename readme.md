@@ -1,6 +1,6 @@
 # Project Name
 
-A System which consist of models related to a moodle system based on university database which will manage the authentication based on user scenario. 
+A System which consist of models related to a moodle system based on university database which will manage the authentication based on user scenario.
 -Django ORM
 -JWTauth
 -CRUDoperations
@@ -12,6 +12,13 @@ A System which consist of models related to a moodle system based on university 
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Usage
+
+1. Run the start.sh file
+   ```bash
+   ./start.sh
+   ```
 
 ## Installation
 
