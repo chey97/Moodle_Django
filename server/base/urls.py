@@ -1,7 +1,7 @@
 from django.urls import path, include
 from base.views.subject_views import subject_list_get, subject_create_post, subject_manage
 from base.views.administrator_view import administrator_list
-from base.views.student_views import student_list_get, student_detail
+from base.views.student_views import student_list_get, student_detail, student_create_post
 from base.views.teacher_views import teacher_list
 from base.views.classroom_views import classroom_list_get, classroom_create_post, classroom_detail
 from .views.create_user import CreateUserView, ListUsersView
@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('administrator/', administrator_list, name='administrator-list'),
     path('students/', student_list_get, name='student-list-get'),
+    path('students/create/', student_create_post, name='student-create-post'),
     path('students/<int:pk>/', student_detail, name='student-detail'),
     path('teacher/', teacher_list, name='teacher-list'),
     path('classrooms/', classroom_list_get, name='classroom-list'),
