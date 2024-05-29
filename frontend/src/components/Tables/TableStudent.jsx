@@ -1,58 +1,74 @@
 import React, { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import TablePagination from "@mui/material/TablePagination";
-import { Typography, Box } from "@mui/material";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { ACCESS_TOKEN } from "../../constants";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function BasicTable() {
   const [students, setStudents] = useState([]);
   const [headers, setHeaders] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        const response = await fetch("http://localhost:8000/students/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        setStudents(data);
-
-        // Extract headers dynamically from the first student object
-        if (data.length > 0) {
-          const studentHeaders = Object.keys(data[0]);
-          setHeaders(studentHeaders);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     fetchData();
   }, []);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem(ACCESS_TOKEN);
+      const response = await fetch("http://localhost:8000/students/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      setStudents(data);
+      if (data.length > 0) {
+        setHeaders(Object.keys(data[0]));
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem(ACCESS_TOKEN);
+      const response = await fetch(`http://localhost:8000/students/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete student");
+      }
+      setStudents(students.filter((student) => student.id !== id));
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
+  };
+
+  const handleRefresh = async () => {
+    await fetchData();
   };
 
   return (
@@ -85,7 +101,11 @@ export default function BasicTable() {
         >
           Students
         </Typography>
+        <IconButton color="inherit" onClick={handleRefresh}>
+          <RefreshIcon />
+        </IconButton>
       </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -96,27 +116,25 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((student, index) => (
-                <TableRow key={index}>
-                  {headers.map((header) => (
-                    <TableCell key={header}>{student[header]}</TableCell>
-                  ))}
-                </TableRow>
-              ))}
+            {students.map((student, index) => (
+              <TableRow key={index} hover>
+                {headers.map((header) => (
+                  <TableCell key={header}>{student[header]}</TableCell>
+                ))}
+                <TableCell>
+                  <IconButton
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDelete(student.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={students.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 }

@@ -23,7 +23,7 @@ def student_create_post(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAdministrator])
+@permission_classes([IsAuthenticated])
 def student_detail(request, pk):
     try:
         student = Student.objects.get(pk=pk)
